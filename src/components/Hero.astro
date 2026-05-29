@@ -1,0 +1,98 @@
+---
+---
+
+<section class="hero" id="main">
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__grid"></div>
+    <div class="hero__glow hero__glow--blue"></div>
+    <div class="hero__glow hero__glow--orange"></div>
+  </div>
+
+  <div class="wrap hero__inner">
+    <span class="pill stagger" style="--d:0">
+      <span class="dot"></span> Amazon Delivery Service Partner · Station DOB7
+    </span>
+
+    <h1 class="hero__title">
+      <span class="stagger" style="--d:1">Every package.</span>
+      <span class="stagger" style="--d:2">Every door.</span>
+      <span class="stagger grad" style="--d:3">On time.</span>
+    </h1>
+
+    <p class="hero__lead stagger" style="--d:4">
+      Lelit Logistics runs last-mile delivery out of Glastonbury, Connecticut —
+      moving thousands of packages a day with a crew that takes safety,
+      precision, and people seriously.
+    </p>
+
+    <div class="hero__actions stagger" style="--d:5">
+      <a href="#careers" class="btn btn--orange">Drive with us <span class="arrow">↗</span></a>
+      <a href="#contact" class="btn btn--ghost">Partner with us</a>
+    </div>
+
+    <div class="hero__meta stagger" style="--d:6">
+      <div><strong>35</strong><span>drivers daily</span></div>
+      <div><strong>DOB7</strong><span>Glastonbury, CT</span></div>
+      <div><strong>Fantastic+</strong><span>safety standard</span></div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: clamp(4rem, 11vw, 8rem) clamp(4rem, 11vw, 8rem);
+    overflow: hidden;
+    text-align: center;
+  }
+  .hero__bg { position: absolute; inset: 0; z-index: 0; }
+  .hero__grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 54px 54px;
+    mask-image: radial-gradient(circle at 50% 30%, #000, transparent 72%);
+    -webkit-mask-image: radial-gradient(circle at 50% 30%, #000, transparent 72%);
+  }
+  .hero__glow { position: absolute; border-radius: 50%; filter: blur(20px); }
+  .hero__glow--blue {
+    top: -18%; left: 8%;
+    width: 46vw; height: 46vw; max-width: 620px; max-height: 620px;
+    background: radial-gradient(circle, rgba(32,136,248,0.20), transparent 60%);
+  }
+  .hero__glow--orange {
+    top: 0%; right: 4%;
+    width: 42vw; height: 42vw; max-width: 560px; max-height: 560px;
+    background: radial-gradient(circle, rgba(248,120,0,0.16), transparent 60%);
+  }
+
+  .hero__inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+
+  .hero__title { font-size: clamp(2.9rem, 9.5vw, 6.6rem); margin: 1.6rem 0 1.6rem; }
+  .hero__title span { display: block; }
+
+  .hero__lead { max-width: 54ch; color: var(--fg-soft); font-size: clamp(1.05rem, 1rem + 0.4vw, 1.3rem); }
+
+  .hero__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 2.2rem; justify-content: center; }
+
+  .hero__meta {
+    display: flex; flex-wrap: wrap; gap: 2.6rem; justify-content: center;
+    margin-top: 3.4rem; padding-top: 2.2rem;
+    border-top: 1px solid var(--line);
+  }
+  .hero__meta div { display: flex; flex-direction: column; }
+  .hero__meta strong { font-family: var(--font-display); font-size: 1.7rem; letter-spacing: -0.03em; }
+  .hero__meta span { font-size: 0.85rem; color: var(--fg-faint); }
+
+  .stagger {
+    opacity: 0; transform: translateY(20px);
+    animation: rise 0.9s var(--ease) forwards;
+    animation-delay: calc(var(--d) * 0.09s + 0.1s);
+  }
+  @keyframes rise { to { opacity: 1; transform: none; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stagger { opacity: 1; transform: none; animation: none; }
+  }
+</style>

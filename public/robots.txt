@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://lelitlogistics.com/sitemap-index.xml

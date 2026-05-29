@@ -1,0 +1,149 @@
+/* ============================================================
+   Lelit Logistics — design system  (dark · Linear/Vercel vibe)
+   Brand: blue #2088F8 + orange #F87800
+   ============================================================ */
+
+:root {
+  /* brand */
+  --blue:       #2088F8;
+  --blue-soft:  #6FB0FB;
+  --blue-deep:  #0E5FC4;
+  --orange:     #F87800;
+  --orange-soft:#FFA24D;
+  --orange-deep:#C85E00;
+
+  /* dark surfaces */
+  --bg:         #080B11;
+  --bg-2:       #0D131C;
+  --surface:    #111927;
+  --surface-2:  #16202F;
+  --line:       rgba(255,255,255,0.09);
+  --line-soft:  rgba(255,255,255,0.05);
+
+  /* text */
+  --fg:         #EAF0F8;
+  --fg-soft:    #9FB0C4;
+  --fg-faint:   #66758A;
+
+  /* type */
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-body:    "Hanken Grotesk", system-ui, sans-serif;
+
+  --gutter: clamp(1.25rem, 5vw, 5rem);
+  --maxw: 1200px;
+  --radius: 16px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.55;
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.12rem);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  color: var(--fg);
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+.wrap { width: 100%; max-width: var(--maxw); margin-inline: auto; padding-inline: var(--gutter); }
+
+/* eyebrow pill */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.03);
+  padding: 0.5em 1em;
+  border-radius: 100px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--fg-soft);
+}
+.pill .dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 10px #4ade80;
+}
+
+.eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--orange-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+}
+.eyebrow::before { content: ""; width: 26px; height: 2px; background: var(--orange); display: inline-block; }
+
+/* gradient text accent */
+.grad {
+  background: linear-gradient(100deg, var(--blue-soft), var(--orange-soft));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* buttons */
+.btn {
+  --bg: var(--orange);
+  --fg: #1a0d00;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.98rem;
+  letter-spacing: -0.01em;
+  padding: 0.9em 1.6em;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), background 0.3s var(--ease), border-color 0.3s var(--ease);
+  will-change: transform;
+}
+.btn .arrow { transition: transform 0.35s var(--ease); }
+.btn:hover { transform: translateY(-2px); }
+.btn:hover .arrow { transform: translate(3px, -3px); }
+.btn--orange { --bg: var(--orange); --fg: #1a0d00; }
+.btn--orange:hover { background: var(--orange-soft); box-shadow: 0 14px 34px -12px rgba(248,120,0,0.55); }
+.btn--ghost { --bg: transparent; --fg: var(--fg); border-color: var(--line); }
+.btn--ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.2); }
+.btn--light { --bg: var(--fg); --fg: var(--bg); }
+.btn--light:hover { box-shadow: 0 14px 34px -14px rgba(234,240,248,0.4); }
+
+/* scroll reveal */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
+}
+[data-reveal].in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  [data-reveal] { opacity: 1; transform: none; }
+  html { scroll-behavior: auto; }
+}
+
+::selection { background: var(--orange); color: #1a0d00; }

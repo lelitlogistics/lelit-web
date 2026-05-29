@@ -1,0 +1,73 @@
+---
+const pillars = [
+  { n: '01', title: 'Last-mile delivery', body: 'Standard parcel, oversize, and same-day routes across central Connecticut, dispatched and tracked end to end.' },
+  { n: '02', title: 'Safety first, always', body: 'Netradyne in every van, daily vehicle inspections, and coaching built into the week — not bolted on after an incident.' },
+  { n: '03', title: 'Real driver training', body: 'New drivers ride before they run routes. Clear expectations, real support, and the tools to grow with us.' },
+  { n: '04', title: 'Tech that keeps us moving', body: 'In-house tools for scheduling, fleet maintenance, and performance keep the operation tight and every van road-ready.' },
+];
+const stats = [
+  { value: '6K+', label: 'packages delivered weekly' },
+  { value: '20+', label: 'routes every day' },
+  { value: '99%', label: 'on-time delivery target' },
+  { value: '35', label: 'drivers on the road daily' },
+];
+---
+
+<section class="op" id="operation">
+  <div class="wrap">
+    <div class="op__head" data-reveal>
+      <span class="eyebrow">The operation</span>
+      <h2>Built to run clean, every single day.</h2>
+    </div>
+
+    <div class="op__stats" data-reveal>
+      {stats.map((s) => (
+        <div class="stat"><span class="stat__v grad">{s.value}</span><span class="stat__l">{s.label}</span></div>
+      ))}
+    </div>
+
+    <div class="op__grid">
+      {pillars.map((p, i) => (
+        <article class="pillar" data-reveal style={`transition-delay:${i * 70}ms`}>
+          <span class="pillar__n">{p.n}</span>
+          <h3>{p.title}</h3>
+          <p>{p.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .op { padding-block: clamp(4.5rem, 10vw, 8rem); position: relative; }
+  .op__head h2 { font-size: clamp(2rem, 5vw, 3.6rem); margin-top: 1.1rem; max-width: 16ch; }
+
+  .op__stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+    margin: clamp(2.5rem, 6vw, 4rem) 0; padding-block: 2rem;
+    border-block: 1px solid var(--line);
+  }
+  .stat { display: flex; flex-direction: column; gap: 0.3rem; }
+  .stat__v { font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.4rem); letter-spacing: -0.03em; }
+  .stat__l { font-size: 0.85rem; color: var(--fg-faint); }
+
+  .op__grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
+  .pillar {
+    border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 1.8rem; background: var(--surface);
+    transition: border-color 0.4s var(--ease), transform 0.4s var(--ease), background 0.4s var(--ease);
+  }
+  .pillar:hover {
+    border-color: rgba(248,120,0,0.5);
+    transform: translateY(-4px);
+    background: var(--surface-2);
+  }
+  .pillar__n { font-family: var(--font-display); color: var(--orange-soft); font-size: 0.95rem; letter-spacing: 0.1em; }
+  .pillar h3 { font-size: 1.5rem; margin: 0.7rem 0 0.6rem; }
+  .pillar p { color: var(--fg-soft); font-size: 0.98rem; }
+
+  @media (max-width: 760px) {
+    .op__stats { grid-template-columns: repeat(2, 1fr); gap: 1.8rem 1.2rem; }
+    .op__grid { grid-template-columns: 1fr; }
+  }
+</style>

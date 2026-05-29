@@ -1,0 +1,138 @@
+---
+---
+
+<section class="contact" id="contact">
+  <div class="wrap contact__inner">
+    <div class="contact__lead" data-reveal>
+      <span class="eyebrow">Contact</span>
+      <h2>Let's talk.</h2>
+      <p>
+        Drivers, fill out the form and we'll be in touch fast. For partnerships
+        or anything else, email us directly at
+        <a href="mailto:hiring@lelitlogistics.com">hiring@lelitlogistics.com</a>.
+      </p>
+      <ul class="contact__facts">
+        <li><span>Station</span><strong>DOB7 — Glastonbury, CT</strong></li>
+        <li><span>Email</span><strong>hiring@lelitlogistics.com</strong></li>
+        <li><span>Response</span><strong>Within 48 business hours</strong></li>
+      </ul>
+    </div>
+
+    <form class="form" data-reveal id="apply-form" novalidate>
+      <div class="hp" aria-hidden="true">
+        <label>Leave this empty if you're human
+          <input type="text" name="company_website" tabindex="-1" autocomplete="off" />
+        </label>
+      </div>
+
+      <div class="field">
+        <label for="f-name">Full name</label>
+        <input id="f-name" name="name" type="text" required autocomplete="name" />
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="f-phone">Phone</label>
+          <input id="f-phone" name="phone" type="tel" required autocomplete="tel" />
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" required autocomplete="email" />
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-role">I'm interested in</label>
+        <select id="f-role" name="role" required>
+          <option value="">Select one…</option>
+          <option>Full-Time Driver</option>
+          <option>Part-Time Driver</option>
+          <option>Partnership / business inquiry</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="f-msg">Anything we should know? <span>(optional)</span></label>
+        <textarea id="f-msg" name="message" rows="4"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn--orange form__submit">
+        Send application <span class="arrow">↗</span>
+      </button>
+
+      <p class="form__status" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const ENDPOINT = ''; // e.g. 'https://hireflow-production-04a4.up.railway.app/api/apply'
+  const bind = () => {
+    const form = document.getElementById('apply-form');
+    if (!form || form.dataset.bound) return;
+    form.dataset.bound = '1';
+    const status = form.querySelector('.form__status');
+    const btn = form.querySelector('.form__submit');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (form.company_website && form.company_website.value) return;
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      const data = Object.fromEntries(new FormData(form).entries());
+      delete data.company_website;
+      btn.disabled = true; btn.style.opacity = '0.6';
+      status.textContent = 'Sending…'; status.className = 'form__status';
+      try {
+        if (ENDPOINT) {
+          const res = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+          if (!res.ok) throw new Error('bad response');
+        } else { await new Promise((r) => setTimeout(r, 500)); }
+        form.reset();
+        status.textContent = "Received. We'll get back to you within 48 business hours.";
+        status.classList.add('ok');
+      } catch (err) {
+        status.textContent = "Couldn't send right now — email us at hiring@lelitlogistics.com.";
+        status.classList.add('err');
+      } finally { btn.disabled = false; btn.style.opacity = ''; }
+    });
+  };
+  bind();
+  document.addEventListener('astro:after-swap', bind);
+</script>
+
+<style>
+  .contact { padding-block: clamp(4.5rem, 10vw, 8rem); }
+  .contact__inner { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(2rem, 6vw, 5rem); align-items: start; }
+  .contact__lead h2 { font-size: clamp(2.6rem, 6vw, 4.5rem); margin: 1rem 0 1rem; }
+  .contact__lead p { color: var(--fg-soft); max-width: 42ch; }
+  .contact__lead a { color: var(--blue-soft); font-weight: 600; border-bottom: 1px solid currentColor; }
+  .contact__facts { list-style: none; margin-top: 2.4rem; display: flex; flex-direction: column; }
+  .contact__facts li { display: flex; flex-direction: column; gap: 0.15rem; padding: 1rem 0; border-top: 1px solid var(--line); }
+  .contact__facts span { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-faint); }
+  .contact__facts strong { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; }
+
+  .form { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(1.6rem, 4vw, 2.6rem); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .field { display: flex; flex-direction: column; margin-bottom: 1.2rem; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .field label { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.45rem; color: var(--fg); }
+  .field label span { color: var(--fg-faint); font-weight: 400; }
+  .field input, .field select, .field textarea {
+    font-family: var(--font-body); font-size: 1rem; color: var(--fg);
+    background: var(--bg-2); border: 1px solid var(--line); border-radius: 11px;
+    padding: 0.85em 1em; transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  }
+  .field input::placeholder, .field textarea::placeholder { color: var(--fg-faint); }
+  .field select { color: var(--fg); }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none; border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(32,136,248,0.2);
+  }
+  .field textarea { resize: vertical; }
+  .form__submit { width: 100%; justify-content: center; margin-top: 0.4rem; }
+  .form__status { margin-top: 1rem; font-size: 0.92rem; min-height: 1.2em; color: var(--fg-soft); }
+  .form__status.ok { color: #5fd99a; font-weight: 600; }
+  .form__status.err { color: var(--orange-soft); font-weight: 600; }
+
+  @media (max-width: 860px) { .contact__inner { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) { .field-row { grid-template-columns: 1fr; } }
+</style>
