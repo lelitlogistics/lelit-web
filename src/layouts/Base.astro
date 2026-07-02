@@ -2,6 +2,10 @@
 import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 
+// Google Analytics 4 — pega aquí el Measurement ID (formato G-XXXXXXXXXX)
+// cuando crees la propiedad en analytics.google.com. Vacío = no carga nada.
+const GA_ID = '';
+
 interface Props {
   title?: string;
   description?: string;
@@ -47,6 +51,22 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
     />
 
     <ClientRouter />
+
+    {GA_ID && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
+        <script is:inline define:vars={{ GA_ID }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', GA_ID);
+          // Astro view transitions: registrar cada navegación como pageview
+          document.addEventListener('astro:page-load', () => {
+            gtag('config', GA_ID, { page_path: window.location.pathname });
+          });
+        </script>
+      </>
+    )}
   </head>
   <body>
     <a href="#main" class="skip">Skip to content</a>

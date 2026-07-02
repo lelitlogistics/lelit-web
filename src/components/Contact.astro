@@ -95,6 +95,10 @@
         form.reset();
         status.textContent = "Received. We'll get back to you within 48 business hours.";
         status.classList.add('ok');
+        // Analytics: registrar la aplicación como conversión (si GA está activo)
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'generate_lead', { form: 'apply', role: data.role || '' });
+        }
       } catch (err) {
         status.textContent = "Couldn't send right now — email us at hiring@lelitlogistics.com.";
         status.classList.add('err');
