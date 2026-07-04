@@ -1,0 +1,103 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const updated = 'July 3, 2026';
+---
+
+<Base
+  title="SMS Terms & Conditions — Lelit Logistics LLC"
+  description="Terms and conditions for SMS messaging from Lelit Logistics LLC, including program description, message frequency, opt-out, and support."
+>
+  <Nav />
+  <main class="policy" id="main">
+    <div class="wrap policy__inner">
+      <span class="eyebrow">Legal</span>
+      <h1>SMS Terms &amp; Conditions</h1>
+      <p class="policy__updated">Last updated: {updated}</p>
+
+      <section>
+        <h2>Program description</h2>
+        <p>
+          Lelit Logistics LLC ("we," "us") operates an employment notification
+          SMS program for job applicants and employees. Messages include:
+          interview scheduling, confirmations and reminders, drug test
+          instructions, onboarding updates, employment-related announcements,
+          and weekly performance scorecard notifications.
+        </p>
+      </section>
+
+      <section>
+        <h2>Consent &amp; enrollment</h2>
+        <p>
+          You enroll by providing your phone number during the job application
+          or onboarding process and agreeing to be contacted about your
+          application or employment. Consent is not a condition of employment
+          or of purchase.
+        </p>
+      </section>
+
+      <section>
+        <h2>Message frequency</h2>
+        <p>
+          Message frequency varies based on your stage in the application or
+          employment process. Message and data rates may apply according to
+          your mobile carrier plan.
+        </p>
+      </section>
+
+      <section>
+        <h2>Opt-out and help</h2>
+        <ul>
+          <li>Reply <strong>STOP</strong> to any message to cancel and stop receiving messages.</li>
+          <li>Reply <strong>HELP</strong> for help, or contact us at <a href="mailto:HR@lelitlogistics.com">HR@lelitlogistics.com</a>.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Privacy</h2>
+        <p>
+          Mobile information will not be shared with third parties or
+          affiliates for marketing or promotional purposes. See our
+          <a href="/privacy">Privacy Policy</a> for details on how we collect,
+          use, and protect your information.
+        </p>
+      </section>
+
+      <section>
+        <h2>Carriers</h2>
+        <p>
+          Carriers are not liable for delayed or undelivered messages.
+        </p>
+      </section>
+
+      <section>
+        <h2>Contact us</h2>
+        <p class="policy__contact">
+          Lelit Logistics LLC<br />
+          35 National Drive<br />
+          Glastonbury, CT 06033<br />
+          <a href="mailto:HR@lelitlogistics.com">HR@lelitlogistics.com</a>
+        </p>
+      </section>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .policy { padding-block: clamp(3.5rem, 8vw, 6rem); }
+  .policy__inner { max-width: 72ch; }
+  .policy h1 { font-size: clamp(2.4rem, 6vw, 4rem); margin: 1rem 0 0.4rem; }
+  .policy__updated { color: var(--fg-faint); font-size: 0.9rem; margin-bottom: 2.5rem; }
+  .policy section { margin-bottom: 2.2rem; }
+  .policy h2 { font-size: 1.45rem; margin-bottom: 0.7rem; }
+  .policy p { color: var(--fg-soft); margin-bottom: 0.8rem; }
+  .policy ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; margin-top: 0.4rem; }
+  .policy li { position: relative; padding-left: 1.6rem; color: var(--fg-soft); }
+  .policy li::before { content: "→"; position: absolute; left: 0; color: var(--orange); font-weight: 700; }
+  .policy li strong { color: var(--fg); }
+  .policy__contact { line-height: 1.7; }
+  .policy a { color: var(--blue-soft); font-weight: 600; border-bottom: 1px solid currentColor; }
+</style>
