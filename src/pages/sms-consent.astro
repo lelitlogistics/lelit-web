@@ -1,0 +1,107 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Base
+  title="SMS Notifications Sign-Up — Lelit Logistics LLC"
+  description="Sign up to receive employment-related SMS notifications from Lelit Logistics LLC. Interview scheduling, drug test instructions, onboarding updates, and performance notifications."
+>
+  <Nav />
+  <main class="policy" id="main">
+    <div class="wrap policy__inner">
+      <span class="eyebrow">Notifications</span>
+      <h1>SMS Notifications Sign-Up</h1>
+      <p class="policy__updated">Lelit Logistics LLC — Amazon Delivery Service Partner, Glastonbury CT</p>
+
+      <section>
+        <p>
+          Lelit Logistics LLC sends employment-related text messages to job
+          applicants and employees who opt in: <strong>interview scheduling and
+          reminders, drug test instructions, onboarding updates, and weekly
+          performance scorecard notifications</strong>. Fill out the form below
+          to sign up.
+        </p>
+      </section>
+
+      <section>
+        <form
+          name="sms-consent"
+          method="POST"
+          data-netlify="true"
+          class="consent-form"
+        >
+          <input type="hidden" name="form-name" value="sms-consent" />
+          <label>
+            <span>Full name</span>
+            <input type="text" name="name" required placeholder="Your full name" />
+          </label>
+          <label>
+            <span>Mobile phone number</span>
+            <input type="tel" name="phone" required placeholder="(860) 555-0123" />
+          </label>
+          <label class="consent-check">
+            <input type="checkbox" name="sms_consent" value="yes" required />
+            <span>
+              I agree to receive employment-related SMS text messages from
+              Lelit Logistics LLC at the mobile number provided, including
+              interview scheduling and reminders, drug test instructions,
+              onboarding updates, and weekly performance scorecard
+              notifications. Message frequency varies. Message and data rates
+              may apply. Reply <strong>STOP</strong> to unsubscribe at any time
+              or <strong>HELP</strong> for help. Consent is not a condition of
+              employment. See our
+              <a href="/privacy">Privacy Policy</a> and
+              <a href="/terms">SMS Terms &amp; Conditions</a>.
+            </span>
+          </label>
+          <button type="submit" class="consent-submit">Sign me up</button>
+        </form>
+      </section>
+
+      <section>
+        <h2>Program details</h2>
+        <ul>
+          <li><strong>Program name:</strong> Lelit Logistics Employment Notifications</li>
+          <li><strong>Message frequency:</strong> varies based on your application or employment status (recurring).</li>
+          <li><strong>Message and data rates may apply.</strong> Contact your wireless provider for plan details.</li>
+          <li><strong>Opt out:</strong> reply <strong>STOP</strong> to any message. You will receive one final confirmation message and no further texts.</li>
+          <li><strong>Support:</strong> reply <strong>HELP</strong> to any message, or contact <a href="mailto:HR@lelitlogistics.com">HR@lelitlogistics.com</a> / (860) 477-2688.</li>
+        </ul>
+        <p>
+          <strong>No mobile information will be shared with third parties or
+          affiliates for marketing or promotional purposes.</strong> Text
+          messaging originator opt-in data and consent will not be shared
+          with, or sold to, any third parties.
+        </p>
+      </section>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .policy { padding-block: clamp(3.5rem, 8vw, 6rem); }
+  .policy__inner { max-width: 72ch; }
+  .policy h1 { font-size: clamp(2.4rem, 6vw, 4rem); margin: 1rem 0 0.4rem; }
+  .policy__updated { color: var(--fg-faint); font-size: 0.9rem; margin-bottom: 2.5rem; }
+  .policy section { margin-bottom: 2.2rem; }
+  .policy h2 { font-size: 1.45rem; margin-bottom: 0.7rem; }
+  .policy p { color: var(--fg-soft); margin-bottom: 0.8rem; }
+  .policy ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; margin-top: 0.4rem; }
+  .policy li { position: relative; padding-left: 1.6rem; color: var(--fg-soft); }
+  .policy li::before { content: "→"; position: absolute; left: 0; color: var(--orange); font-weight: 700; }
+  .policy li strong { color: var(--fg); }
+  .policy a { color: var(--blue-soft); font-weight: 600; border-bottom: 1px solid currentColor; }
+
+  .consent-form { display: flex; flex-direction: column; gap: 1.1rem; padding: 1.6rem; border: 1px solid var(--line, rgba(255,255,255,.14)); border-radius: 14px; }
+  .consent-form label { display: flex; flex-direction: column; gap: 0.35rem; }
+  .consent-form label > span { font-weight: 600; font-size: 0.95rem; }
+  .consent-form input[type="text"],
+  .consent-form input[type="tel"] { padding: 0.7rem 0.9rem; border-radius: 10px; border: 1px solid var(--line, rgba(255,255,255,.18)); background: transparent; color: inherit; font: inherit; }
+  .consent-check { flex-direction: row !important; align-items: flex-start; gap: 0.7rem !important; }
+  .consent-check input { margin-top: 0.25rem; width: 1.05rem; height: 1.05rem; flex-shrink: 0; }
+  .consent-check span { font-size: 0.9rem; line-height: 1.55; color: var(--fg-soft); font-weight: 400 !important; }
+  .consent-submit { align-self: flex-start; padding: 0.75rem 1.6rem; border-radius: 999px; border: none; background: var(--orange, #f97316); color: #fff; font-weight: 700; font-size: 1rem; cursor: pointer; }
+</style>
