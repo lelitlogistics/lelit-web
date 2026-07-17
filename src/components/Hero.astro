@@ -30,7 +30,11 @@
       <a href="#contact" class="btn btn--ghost">Partner with us</a>
     </div>
 
-    <div class="hero__meta stagger" style="--d:6">
+    <div class="hero__van stagger" style="--d:6" aria-hidden="true">
+      <canvas id="van3d"></canvas>
+    </div>
+
+    <div class="hero__meta stagger" style="--d:7">
       <div><strong>35</strong><span>drivers daily</span></div>
       <div><strong>DOB7</strong><span>Glastonbury, CT</span></div>
       <div><strong>Fantastic+</strong><span>safety standard</span></div>
@@ -55,6 +59,14 @@
     mask-image: radial-gradient(circle at 50% 30%, #000, transparent 72%);
     -webkit-mask-image: radial-gradient(circle at 50% 30%, #000, transparent 72%);
   }
+  .hero__van {
+    width: min(100%, 780px);
+    height: clamp(240px, 36vw, 360px);
+    margin: clamp(0.5rem, 2vw, 1.5rem) auto calc(-1 * clamp(0.5rem, 2vw, 1.25rem));
+    pointer-events: none;
+  }
+  .hero__van canvas { width: 100%; height: 100%; display: block; }
+  @media (prefers-reduced-motion: reduce) { .hero__van { display: none; } }
   .hero__glow { position: absolute; border-radius: 50%; filter: blur(20px); }
   .hero__glow--blue {
     top: -18%; left: 8%;
@@ -96,3 +108,133 @@
     .stagger { opacity: 1; transform: none; animation: none; }
   }
 </style>
+
+<script is:inline type="module">
+  // Lelit 3D delivery van — Three.js, lazy, brand colors, motion-respectful
+  const canvas = document.getElementById('van3d');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (canvas && !reduced) {
+    const boot = async () => {
+      const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
+      const BLUE = 0x2088F8, BLUE_DEEP = 0x0E5FC4, ORANGE = 0xF87800, DARK = 0x111825, KRAFT = 0xC98A4B;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      const scene = new THREE.Scene();
+      const cam = new THREE.PerspectiveCamera(38, 2, 0.1, 60);
+      cam.position.set(0, 2.6, 9.2);
+      cam.lookAt(0, 0.3, 0);
+
+      scene.add(new THREE.AmbientLight(0xffffff, 0.55));
+      const key = new THREE.DirectionalLight(0xcfe4ff, 1.25); key.position.set(4, 6, 5); scene.add(key);
+      const rim = new THREE.DirectionalLight(ORANGE, 0.55);   rim.position.set(-5, 3, -4); scene.add(rim);
+
+      const M = (c, opts) => new THREE.MeshStandardMaterial(Object.assign({ color: c, roughness: 0.55, metalness: 0.15, flatShading: true }, opts || {}));
+      const van = new THREE.Group();
+
+      // cuerpo cargo
+      const body = new THREE.Mesh(new THREE.BoxGeometry(4.1, 1.9, 1.9), M(BLUE));
+      body.position.set(-0.25, 1.28, 0); van.add(body);
+      // cabina al frente
+      const cab = new THREE.Mesh(new THREE.BoxGeometry(1.25, 1.45, 1.86), M(BLUE_DEEP));
+      cab.position.set(2.25, 1.05, 0); van.add(cab);
+      // capó
+      const hood = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.62, 1.8), M(BLUE_DEEP));
+      hood.position.set(3.05, 0.66, 0); van.add(hood);
+      // parabrisas
+      const glass = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.85, 1.6), M(0x0b1622, { roughness: 0.1, metalness: 0.7 }));
+      glass.position.set(2.9, 1.28, 0); glass.rotation.z = -0.35; van.add(glass);
+      // franja naranja de marca
+      const stripe = new THREE.Mesh(new THREE.BoxGeometry(4.12, 0.28, 1.92), M(ORANGE, { roughness: 0.4 }));
+      stripe.position.set(-0.25, 1.02, 0); van.add(stripe);
+      // panel trasero naranja (puertas)
+      const doors = new THREE.Mesh(new THREE.BoxGeometry(0.06, 1.7, 1.7), M(0x1b6fd6));
+      doors.position.set(-2.31, 1.28, 0); van.add(doors);
+      // faros
+      [-0.62, 0.62].forEach(z => {
+        const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.11, 10, 10), M(0xfff2cc, { emissive: 0xffe9a8, emissiveIntensity: 0.9 }));
+        lamp.position.set(3.34, 0.72, z); van.add(lamp);
+      });
+      // ruedas
+      const wheelG = new THREE.CylinderGeometry(0.46, 0.46, 0.3, 18);
+      const hubG = new THREE.CylinderGeometry(0.2, 0.2, 0.32, 12);
+      const wheels = [];
+      [[2.35, 0.95], [2.35, -0.95], [-1.55, 0.95], [-1.55, -0.95]].forEach(p => {
+        const w = new THREE.Group();
+        const tire = new THREE.Mesh(wheelG, M(0x0c0f14, { roughness: 0.9 }));
+        const hub = new THREE.Mesh(hubG, M(0x9aa4b2, { metalness: 0.6, roughness: 0.3 }));
+        tire.rotation.x = hub.rotation.x = Math.PI / 2;
+        w.add(tire); w.add(hub);
+        w.position.set(p[0], 0.46, p[1]);
+        van.add(w); wheels.push(w);
+      });
+      van.position.y = 0.15;
+      scene.add(van);
+
+      // sombra suave
+      const shadowTex = (() => {
+        const c = document.createElement('canvas'); c.width = c.height = 128;
+        const g = c.getContext('2d');
+        const gr = g.createRadialGradient(64, 64, 4, 64, 64, 62);
+        gr.addColorStop(0, 'rgba(0,0,0,0.42)'); gr.addColorStop(1, 'rgba(0,0,0,0)');
+        g.fillStyle = gr; g.fillRect(0, 0, 128, 128);
+        return new THREE.CanvasTexture(c);
+      })();
+      const shadow = new THREE.Mesh(new THREE.PlaneGeometry(6.4, 3.4), new THREE.MeshBasicMaterial({ map: shadowTex, transparent: true, depthWrite: false }));
+      shadow.rotation.x = -Math.PI / 2; shadow.position.y = -0.02;
+      scene.add(shadow);
+
+      // paquetes orbitando
+      const boxes = [];
+      const mkBox = (sz, r, speed, y0, phase) => {
+        const grp = new THREE.Group();
+        const b = new THREE.Mesh(new THREE.BoxGeometry(sz, sz, sz), M(KRAFT, { roughness: 0.8 }));
+        const tape = new THREE.Mesh(new THREE.BoxGeometry(sz * 1.02, sz * 0.18, sz * 1.02), M(ORANGE, { roughness: 0.5 }));
+        grp.add(b); grp.add(tape);
+        grp.userData = { r, speed, y0, phase, spin: 0.4 + Math.random() * 0.5 };
+        scene.add(grp); boxes.push(grp);
+      };
+      mkBox(0.42, 3.6, 0.42, 1.9, 0);
+      mkBox(0.3, 4.2, -0.3, 1.2, 2.1);
+      mkBox(0.36, 3.2, 0.52, 2.5, 4.0);
+      mkBox(0.26, 4.6, 0.36, 0.9, 5.2);
+
+      // parallax sutil con el mouse
+      let mx = 0;
+      window.addEventListener('pointermove', e => { mx = (e.clientX / window.innerWidth - 0.5) * 2; }, { passive: true });
+
+      const clock = new THREE.Clock();
+      let visible = true, raf = 0;
+      new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible && !raf) loop(); }).observe(canvas);
+
+      function resize() {
+        const w = canvas.clientWidth, h = canvas.clientHeight;
+        if (canvas.width !== Math.floor(w * renderer.getPixelRatio())) {
+          renderer.setSize(w, h, false);
+          cam.aspect = w / h; cam.updateProjectionMatrix();
+        }
+      }
+
+      function loop() {
+        if (!visible) { raf = 0; return; }
+        raf = requestAnimationFrame(loop);
+        resize();
+        const t = clock.getElapsedTime();
+        van.rotation.y = t * 0.32 + mx * 0.35;
+        van.position.y = 0.15 + Math.sin(t * 1.4) * 0.1;
+        shadow.scale.setScalar(1 - Math.sin(t * 1.4) * 0.05);
+        shadow.material.opacity = 1 - Math.sin(t * 1.4) * 0.25;
+        wheels.forEach(w => { w.rotation.z -= 0.05; });
+        boxes.forEach(b => {
+          const u = b.userData;
+          const a = t * u.speed + u.phase;
+          b.position.set(Math.cos(a) * u.r, u.y0 + Math.sin(t * 1.1 + u.phase) * 0.22, Math.sin(a) * u.r * 0.55);
+          b.rotation.y = t * u.spin; b.rotation.x = t * u.spin * 0.6;
+        });
+        renderer.render(scene, cam);
+      }
+      loop();
+    };
+    ('requestIdleCallback' in window ? requestIdleCallback : fn => setTimeout(fn, 200))(boot);
+  }
+</script>
