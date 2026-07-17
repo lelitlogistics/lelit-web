@@ -92,6 +92,56 @@ const canonical = new URL(Astro.url.pathname, Astro.site).toString();
       document.addEventListener('astro:after-swap', setup);
     </script>
 
+    <script is:inline>
+      // ── Animated counters (premium layer) ──
+      (function () {
+        const counters = document.querySelectorAll('[data-count]');
+        if (!counters.length) return;
+        const ease = (t) => 1 - Math.pow(1 - t, 3);
+        const io = new IntersectionObserver((es) => {
+          es.forEach((e) => {
+            if (!e.isIntersecting) return;
+            io.unobserve(e.target);
+            const el = e.target, target = parseFloat(el.dataset.count);
+            const suffix = el.dataset.suffix || '';
+            const t0 = performance.now(), dur = 1500;
+            const step = (now) => {
+              const p = Math.min(1, (now - t0) / dur);
+              el.textContent = Math.round(target * ease(p)).toLocaleString() + suffix;
+              if (p < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+          });
+        }, { threshold: 0.55 });
+        counters.forEach((c) => io.observe(c));
+      })();
+
+      // ── Lenis smooth scroll: idle-loaded, reduced-motion respected ──
+      (function () {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const load = () => {
+          const sc = document.createElement('script');
+          sc.src = 'https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js';
+          sc.onload = () => {
+            const lenis = new Lenis({ lerp: 0.11, smoothWheel: true });
+            const raf = (t) => { lenis.raf(t); requestAnimationFrame(raf); };
+            requestAnimationFrame(raf);
+            document.querySelectorAll('a[href^="#"]').forEach((a) => {
+              a.addEventListener('click', (e) => {
+                const id = a.getAttribute('href');
+                if (id && id.length > 1 && document.querySelector(id)) {
+                  e.preventDefault();
+                  lenis.scrollTo(id, { offset: -76, duration: 1.15 });
+                }
+              });
+            });
+          };
+          document.head.appendChild(sc);
+        };
+        ('requestIdleCallback' in window ? requestIdleCallback : (f) => setTimeout(f, 150))(load);
+      })();
+    </script>
+
     <style>
       .skip {
         position: absolute;

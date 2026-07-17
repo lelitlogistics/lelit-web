@@ -55,7 +55,13 @@
     mask-image: radial-gradient(circle at 50% 30%, #000, transparent 72%);
     -webkit-mask-image: radial-gradient(circle at 50% 30%, #000, transparent 72%);
   }
-  .hero__glow { position: absolute; border-radius: 50%; filter: blur(20px); }
+  .hero__glow { position: absolute; border-radius: 50%; filter: blur(20px); animation: glowDrift 26s ease-in-out infinite alternate; will-change: transform; }
+  .hero__glow--orange { animation-delay: -13s; }
+  @keyframes glowDrift {
+    from { transform: translate3d(-2%, -1.5%, 0) scale(1); }
+    to   { transform: translate3d(2.5%, 2%, 0) scale(1.07); }
+  }
+  @media (prefers-reduced-motion: reduce) { .hero__glow { animation: none; } }
   .hero__glow--blue {
     top: -18%; left: 8%;
     width: 46vw; height: 46vw; max-width: 620px; max-height: 620px;
@@ -69,7 +75,7 @@
 
   .hero__inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
 
-  .hero__title { font-size: clamp(2.9rem, 9.5vw, 6.6rem); margin: 1.6rem 0 1.6rem; }
+  .hero__title { font-size: clamp(3.1rem, 10vw, 7.4rem); margin: 1.6rem 0 1.7rem; letter-spacing: -0.035em; line-height: 0.98; }
   .hero__title span { display: block; }
 
   .hero__lead { max-width: 54ch; color: var(--fg-soft); font-size: clamp(1.05rem, 1rem + 0.4vw, 1.3rem); }
