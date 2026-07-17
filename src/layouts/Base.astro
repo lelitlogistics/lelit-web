@@ -1,109 +1,96 @@
 ---
-import { ClientRouter } from 'astro:transitions';
-import '../styles/global.css';
-
-// Google Analytics 4 — pega aquí el Measurement ID (formato G-XXXXXXXXXX)
-// cuando crees la propiedad en analytics.google.com. Vacío = no carga nada.
-const GA_ID = 'G-46CJK7RH28';
-
-interface Props {
-  title?: string;
-  description?: string;
-}
-
-const {
-  title = 'Lelit Logistics — Amazon Delivery Service Partner | Glastonbury, CT',
-  description = 'Lelit Logistics is an Amazon Delivery Service Partner based at Station DOB7 in Glastonbury, Connecticut. Reliable last-mile delivery and a place to build a driving career.',
-} = Astro.props;
-
-const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const { title = 'Lelit Logistics — Amazon Delivery Service Partner · Glastonbury, CT' } = Astro.props;
+const desc = 'Lelit Logistics is an independent Amazon Delivery Service Partner operating out of Station DOB7 in Glastonbury, Connecticut. Thousands of packages a day, delivered with care.';
 ---
-
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#080B11" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={canonical} />
-
     <title>{title}</title>
-    <meta name="description" content={description} />
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Lelit Logistics" />
+    <meta name="description" content={desc} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
-    <meta property="og:locale" content="en_US" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
-
-    <!-- Fonts -->
+    <meta property="og:description" content={desc} />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#FFFFFF" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Hanken+Grotesk:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..800&display=swap"
       rel="stylesheet"
     />
-
-    <ClientRouter />
-
-    {GA_ID && (
-      <>
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}></script>
-        <script is:inline define:vars={{ GA_ID }}>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', GA_ID);
-          // Astro view transitions: registrar cada navegación como pageview
-          document.addEventListener('astro:page-load', () => {
-            gtag('config', GA_ID, { page_path: window.location.pathname });
-          });
-        </script>
-      </>
-    )}
+    <style is:global>
+      @import '../styles/global.css';
+    </style>
   </head>
   <body>
-    <a href="#main" class="skip">Skip to content</a>
     <slot />
 
-    <script>
-      // Scroll reveal — shared across page navigations
-      const setup = () => {
+    <script is:inline>
+      // ── Reveal engine (stagger-aware) ──
+      (function () {
+        const els = document.querySelectorAll('[data-reveal], [data-reveal-scale]');
         const io = new IntersectionObserver(
           (entries) => {
             entries.forEach((e) => {
-              if (e.isIntersecting) {
-                e.target.classList.add('in');
-                io.unobserve(e.target);
-              }
+              if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
             });
           },
-          { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+          { threshold: 0.12, rootMargin: '0px 0px -6% 0px' }
         );
-        document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
-      };
-      setup();
-      document.addEventListener('astro:after-swap', setup);
-    </script>
+        els.forEach((el, i) => io.observe(el));
+      })();
 
-    <style>
-      .skip {
-        position: absolute;
-        left: -999px;
-        top: 0;
-        background: var(--ink);
-        color: var(--paper);
-        padding: 0.8em 1.2em;
-        z-index: 10000;
-        border-radius: 0 0 12px 0;
-      }
-      .skip:focus { left: 0; }
-    </style>
+      // ── Animated counters ──
+      (function () {
+        const counters = document.querySelectorAll('[data-count]');
+        if (!counters.length) return;
+        const ease = (t) => 1 - Math.pow(1 - t, 3);
+        const io = new IntersectionObserver((es) => {
+          es.forEach((e) => {
+            if (!e.isIntersecting) return;
+            io.unobserve(e.target);
+            const el = e.target;
+            const target = parseFloat(el.dataset.count);
+            const suffix = el.dataset.suffix || '';
+            const dur = 1600;
+            const t0 = performance.now();
+            const step = (now) => {
+              const p = Math.min(1, (now - t0) / dur);
+              el.textContent = Math.round(target * ease(p)).toLocaleString() + suffix;
+              if (p < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+          });
+        }, { threshold: 0.5 });
+        counters.forEach((c) => io.observe(c));
+      })();
+
+      // ── Lenis smooth scroll (lazy, motion-respectful) ──
+      (function () {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        const load = () => {
+          const s = document.createElement('script');
+          s.src = 'https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js';
+          s.onload = () => {
+            const lenis = new Lenis({ lerp: 0.11, wheelMultiplier: 1, smoothWheel: true });
+            function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
+            requestAnimationFrame(raf);
+            document.querySelectorAll('a[href^="#"]').forEach((a) => {
+              a.addEventListener('click', (e) => {
+                const id = a.getAttribute('href');
+                if (id.length > 1 && document.querySelector(id)) {
+                  e.preventDefault();
+                  lenis.scrollTo(id, { offset: -72, duration: 1.2 });
+                }
+              });
+            });
+          };
+          document.head.appendChild(s);
+        };
+        ('requestIdleCallback' in window ? requestIdleCallback : (f) => setTimeout(f, 150))(load);
+      })();
+    </script>
   </body>
 </html>

@@ -1,0 +1,44 @@
+---
+const items = [
+  { title: 'Safety in every seat', body: 'Netradyne cameras in every van, daily vehicle inspections with VIN verification, and coaching built into the week — not bolted on after an incident.' },
+  { title: 'Our own operations platform', body: 'Scheduling, dispatch, fleet maintenance, payroll checks, and performance — run on software we built in-house, tuned to exactly how this station works.' },
+  { title: 'A fleet that gets cared for', body: 'Weekly inspections, tracked repairs, and preventive maintenance keep every van road-ready. If it moves packages, it gets looked after.' },
+];
+---
+<section class="tech dark" id="technology">
+  <div class="wrap">
+    <div class="tech__head">
+      <span class="eyebrow" data-reveal>Technology &amp; safety</span>
+      <h2 data-reveal style="--rd:1">The invisible work<br />behind an on-time day.</h2>
+    </div>
+    <div class="tech__grid">
+      {items.map((it, i) => (
+        <article class="tech__card" data-reveal-scale style={`--rd:${i}`}>
+          <h3>{it.title}</h3>
+          <p>{it.body}</p>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .tech { padding-block: clamp(5rem, 11vw, 9rem); }
+  .tech__head { max-width: 640px; margin-bottom: clamp(var(--s6), 6vw, var(--s10)); }
+  .tech__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s2); }
+  .tech__card {
+    padding: var(--s5) var(--s4);
+    border: 1px solid rgba(245,245,247,.10);
+    border-radius: var(--r-lg);
+    background: rgba(245,245,247,.03);
+    transition: transform .5s var(--ease-out), border-color .4s var(--ease), background .4s var(--ease);
+  }
+  .tech__card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(245,245,247,.22);
+    background: rgba(245,245,247,.05);
+  }
+  .tech__card h3 { margin-bottom: 12px; }
+  .tech__card p { font-size: 15.5px; line-height: 1.65; }
+  @media (max-width: 860px) { .tech__grid { grid-template-columns: 1fr; } }
+</style>
