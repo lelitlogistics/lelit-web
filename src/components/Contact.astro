@@ -56,15 +56,22 @@
         <textarea id="f-msg" name="message" rows="4"></textarea>
       </div>
 
+      <label class="form__optin">
+        <input type="checkbox" id="f-sms" name="sms_consent" value="yes" required />
+        <span>
+          I agree to receive SMS text messages from <strong>Lelit Logistics
+          LLC</strong> about my job application, interview scheduling and
+          reminders, and employment updates at the phone number provided.
+          Message frequency varies. Msg &amp; data rates may apply. Reply
+          STOP to opt out or HELP for help.
+          <a href="/sms-consent">SMS Terms</a> ·
+          <a href="/privacy">Privacy Policy</a>
+        </span>
+      </label>
+
       <button type="submit" class="btn btn--orange form__submit">
         Send application <span class="arrow">↗</span>
       </button>
-
-      <p class="form__consent">
-        By submitting, you agree to be contacted by phone, email, or SMS about
-        your application. Message and data rates may apply; reply STOP to opt
-        out. See our <a href="/privacy">Privacy Policy</a>.
-      </p>
 
       <p class="form__status" role="status" aria-live="polite"></p>
     </form>
@@ -85,6 +92,10 @@
       if (!form.checkValidity()) { form.reportValidity(); return; }
       const data = Object.fromEntries(new FormData(form).entries());
       delete data.company_website;
+      // evidencia de opt-in para A2P: cuándo y dónde consintió
+      data.sms_consent = data.sms_consent === 'yes';
+      data.sms_consent_at = new Date().toISOString();
+      data.sms_consent_source = 'lelitlogistics.com apply form';
       btn.disabled = true; btn.style.opacity = '0.6';
       status.textContent = 'Sending…'; status.className = 'form__status';
       try {
@@ -118,6 +129,10 @@
   .contact__facts { list-style: none; margin-top: 2.4rem; display: flex; flex-direction: column; }
   .contact__facts li { display: flex; flex-direction: column; gap: 0.15rem; padding: 1rem 0; border-top: 1px solid var(--line); }
   .contact__facts span { font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg-faint); }
+  .form__optin { display: flex; gap: 0.7rem; align-items: flex-start; margin: 0.4rem 0 1.1rem; cursor: pointer; }
+  .form__optin input { margin-top: 0.28rem; width: 1.05rem; height: 1.05rem; accent-color: var(--blue-soft, #2088F8); flex: 0 0 auto; cursor: pointer; }
+  .form__optin span { font-size: 0.82rem; line-height: 1.55; color: var(--fg-soft); }
+  .form__optin a { color: var(--blue-soft); border-bottom: 1px solid currentColor; }
   .contact__facts strong { font-family: var(--font-display); font-size: 1.15rem; font-weight: 600; }
 
   .form { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(1.6rem, 4vw, 2.6rem); }
