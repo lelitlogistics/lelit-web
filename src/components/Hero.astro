@@ -1,104 +1,29 @@
 ---
+const heroImage = 'https://assets.aboutamazon.com/83/6a/1e92b9d24bda82e9aac108ee61eb/rivian-hero-2000x1125-1.jpg';
 ---
 
 <section class="hero" id="main">
-  <div class="hero__bg" aria-hidden="true">
-    <div class="hero__grid"></div>
-    <div class="hero__glow hero__glow--blue"></div>
-    <div class="hero__glow hero__glow--orange"></div>
-  </div>
-
+  <div class="hero__bg" aria-hidden="true"><div class="hero__grid"></div><div class="hero__glow hero__glow--blue"></div><div class="hero__glow hero__glow--orange"></div></div>
   <div class="wrap hero__inner">
-    <span class="pill stagger" style="--d:0">
-      <span class="dot"></span> Amazon Delivery Service Partner · Station DOB7
-    </span>
-
-    <h1 class="hero__title">
-      <span class="stagger" style="--d:1">Every package.</span>
-      <span class="stagger" style="--d:2">Every door.</span>
-      <span class="stagger grad" style="--d:3">On time.</span>
-    </h1>
-
-    <p class="hero__lead stagger" style="--d:4">
-      Lelit Logistics runs last-mile delivery out of Glastonbury, Connecticut —
-      moving thousands of packages a day with a crew that takes safety,
-      precision, and people seriously.
-    </p>
-
-    <div class="hero__actions stagger" style="--d:5">
-      <a href="#careers" class="btn btn--orange">Drive with us <span class="arrow">↗</span></a>
-      <a href="#contact" class="btn btn--ghost">Partner with us</a>
+    <div class="hero__copy">
+      <span class="pill stagger" style="--d:0"><span class="dot"></span> Amazon Delivery Service Partner · Station DOB7</span>
+      <h1 class="hero__title"><span class="stagger" style="--d:1">Every package.</span><span class="stagger" style="--d:2">Every door.</span><span class="stagger grad" style="--d:3">On time.</span></h1>
+      <p class="hero__lead stagger" style="--d:4">Lelit Logistics runs last-mile delivery out of Glastonbury, Connecticut — moving thousands of packages a day with a crew that takes safety, precision, and people seriously.</p>
+      <div class="hero__actions stagger" style="--d:5"><a href="#careers" class="btn btn--orange">Drive with us <span class="arrow">↗</span></a><a href="#contact" class="btn btn--ghost">Partner with us</a></div>
     </div>
-
-    <div class="hero__meta stagger" style="--d:6">
-      <div><strong>35</strong><span>drivers daily</span></div>
-      <div><strong>DOB7</strong><span>Glastonbury, CT</span></div>
-      <div><strong>Fantastic+</strong><span>safety standard</span></div>
+    <div class="hero__visual stagger" style="--d:3" data-parallax>
+      <img src={heroImage} alt="Amazon electric delivery van by Rivian on a residential route" fetchpriority="high" />
+      <div class="hero__shade"></div><div class="hero__badge"><span>Modern fleet</span><strong>Built for the last mile.</strong></div>
     </div>
+    <div class="hero__meta stagger" style="--d:6"><div><strong>35</strong><span>drivers daily</span></div><div><strong>DOB7</strong><span>Glastonbury, CT</span></div><div><strong>Fantastic+</strong><span>safety standard</span></div></div>
   </div>
 </section>
-
+<script>
+  const visual = document.querySelector('[data-parallax]');
+  if (visual && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    window.addEventListener('scroll', () => { const r = visual.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight) visual.style.setProperty('--shift', `${Math.max(-18, Math.min(18, r.top * -.025))}px`); }, { passive: true });
+  }
+</script>
 <style>
-  .hero {
-    position: relative;
-    padding-block: clamp(4rem, 11vw, 8rem) clamp(4rem, 11vw, 8rem);
-    overflow: hidden;
-    text-align: center;
-  }
-  .hero__bg { position: absolute; inset: 0; z-index: 0; }
-  .hero__grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-    background-size: 54px 54px;
-    mask-image: radial-gradient(circle at 50% 30%, #000, transparent 72%);
-    -webkit-mask-image: radial-gradient(circle at 50% 30%, #000, transparent 72%);
-  }
-  .hero__glow { position: absolute; border-radius: 50%; filter: blur(20px); animation: glowDrift 26s ease-in-out infinite alternate; will-change: transform; }
-  .hero__glow--orange { animation-delay: -13s; }
-  @keyframes glowDrift {
-    from { transform: translate3d(-2%, -1.5%, 0) scale(1); }
-    to   { transform: translate3d(2.5%, 2%, 0) scale(1.07); }
-  }
-  @media (prefers-reduced-motion: reduce) { .hero__glow { animation: none; } }
-  .hero__glow--blue {
-    top: -18%; left: 8%;
-    width: 46vw; height: 46vw; max-width: 620px; max-height: 620px;
-    background: radial-gradient(circle, rgba(32,136,248,0.20), transparent 60%);
-  }
-  .hero__glow--orange {
-    top: 0%; right: 4%;
-    width: 42vw; height: 42vw; max-width: 560px; max-height: 560px;
-    background: radial-gradient(circle, rgba(248,120,0,0.16), transparent 60%);
-  }
-
-  .hero__inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
-
-  .hero__title { font-size: clamp(3.1rem, 10vw, 7.4rem); margin: 1.6rem 0 1.7rem; letter-spacing: -0.035em; line-height: 0.98; }
-  .hero__title span { display: block; }
-
-  .hero__lead { max-width: 54ch; color: var(--fg-soft); font-size: clamp(1.05rem, 1rem + 0.4vw, 1.3rem); }
-
-  .hero__actions { display: flex; flex-wrap: wrap; gap: 0.9rem; margin-top: 2.2rem; justify-content: center; }
-
-  .hero__meta {
-    display: flex; flex-wrap: wrap; gap: 2.6rem; justify-content: center;
-    margin-top: 3.4rem; padding-top: 2.2rem;
-    border-top: 1px solid var(--line);
-  }
-  .hero__meta div { display: flex; flex-direction: column; }
-  .hero__meta strong { font-family: var(--font-display); font-size: 1.7rem; letter-spacing: -0.03em; }
-  .hero__meta span { font-size: 0.85rem; color: var(--fg-faint); }
-
-  .stagger {
-    opacity: 0; transform: translateY(20px);
-    animation: rise 0.9s var(--ease) forwards;
-    animation-delay: calc(var(--d) * 0.09s + 0.1s);
-  }
-  @keyframes rise { to { opacity: 1; transform: none; } }
-
-  @media (prefers-reduced-motion: reduce) {
-    .stagger { opacity: 1; transform: none; animation: none; }
-  }
+.hero{position:relative;padding-block:clamp(4rem,9vw,7rem);overflow:hidden}.hero__bg{position:absolute;inset:0}.hero__grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);background-size:54px 54px;mask-image:radial-gradient(circle at 50% 30%,#000,transparent 75%)}.hero__glow{position:absolute;border-radius:50%;filter:blur(24px);animation:glowDrift 26s ease-in-out infinite alternate}.hero__glow--blue{top:-18%;left:8%;width:46vw;height:46vw;background:radial-gradient(circle,rgba(32,136,248,.2),transparent 60%)}.hero__glow--orange{top:0;right:4%;width:42vw;height:42vw;background:radial-gradient(circle,rgba(248,120,0,.16),transparent 60%);animation-delay:-13s}@keyframes glowDrift{to{transform:translate3d(3%,2%,0) scale(1.07)}}.hero__inner{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,.9fr) minmax(420px,1.1fr);gap:clamp(2rem,5vw,5rem);align-items:center}.hero__copy{text-align:left}.hero__title{font-size:clamp(3.1rem,7vw,6.5rem);margin:1.5rem 0 1.5rem;letter-spacing:-.04em;line-height:.96}.hero__title span{display:block}.hero__lead{max-width:52ch;color:var(--fg-soft);font-size:clamp(1.05rem,1rem + .3vw,1.25rem)}.hero__actions{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2rem}.hero__visual{--shift:0px;position:relative;min-height:clamp(420px,52vw,650px);border:1px solid var(--line);border-radius:calc(var(--radius) + 8px);overflow:hidden;box-shadow:0 35px 90px -45px rgba(0,0,0,.9);transform:translateY(var(--shift));transition:transform .15s linear}.hero__visual img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;object-position:center;transition:transform 1.2s var(--ease),filter .8s var(--ease);filter:saturate(.82) contrast(1.05)}.hero__visual:hover img{transform:scale(1.035);filter:saturate(1) contrast(1.05)}.hero__shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,10,15,.25),transparent 45%),linear-gradient(0deg,rgba(5,10,15,.8),transparent 45%)}.hero__badge{position:absolute;left:1.5rem;bottom:1.5rem;padding:1rem 1.15rem;border-left:3px solid var(--orange);background:rgba(5,10,15,.7);backdrop-filter:blur(12px);display:flex;flex-direction:column}.hero__badge span{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--fg-faint)}.hero__badge strong{font-size:1.05rem}.hero__meta{grid-column:1/-1;display:flex;gap:2.6rem;padding-top:2rem;border-top:1px solid var(--line)}.hero__meta div{display:flex;flex-direction:column}.hero__meta strong{font-family:var(--font-display);font-size:1.7rem}.hero__meta span{font-size:.85rem;color:var(--fg-faint)}.stagger{opacity:0;transform:translateY(20px);animation:rise .9s var(--ease) forwards;animation-delay:calc(var(--d)*.09s + .1s)}@keyframes rise{to{opacity:1;transform:none}}@media(max-width:900px){.hero__inner{grid-template-columns:1fr}.hero__visual{min-height:58vw}.hero__meta{grid-column:auto;flex-wrap:wrap}.hero__copy{text-align:center}.hero__actions{justify-content:center}.hero__lead{margin-inline:auto}}@media(max-width:620px){.hero__visual{min-height:420px}.hero__meta{gap:1.5rem;justify-content:center;text-align:center}}@media(prefers-reduced-motion:reduce){.stagger{opacity:1;transform:none;animation:none}.hero__glow{animation:none}.hero__visual{transform:none!important}.hero__visual img{transition:none}}
 </style>
