@@ -1,1 +1,13 @@
 .hero__media,.fleet,.career-hero{isolation:isolate}.hero__media>img,.fleet>img,.career-hero>img{will-change:opacity,transform}.hero__wash,.fleet__veil,.career-hero__veil{z-index:3;pointer-events:none}.hero__bg,.hero__inner,.hero__scroll,.fleet__inner,.career-hero__inner,.career-hero__caption{z-index:4}
+
+/* Hero photos are selected for the vehicle, so never crop the van to fill the frame. */
+.hero__media{background:#050a0f}
+.hero__media>img{inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center center!important;animation:none!important;transform:none!important}
+.hero__media:hover>img{transform:none!important}
+
+/* Operation/Careers remain immersive full-bleed. Their photos are composed for cover crops. */
+.fleet>img,.career-hero>img{object-fit:cover}
+
+@media(max-width:900px){
+  .hero__media>img{object-fit:contain!important;object-position:center center!important}
+}
