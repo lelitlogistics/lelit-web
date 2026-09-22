@@ -1,0 +1,1 @@
+.hero__media,.fleet,.career-hero{isolation:isolate}.hero__media>img,.fleet>img,.career-hero>img{will-change:opacity,transform}.hero__wash,.fleet__veil,.career-hero__veil{z-index:3;pointer-events:none}.hero__bg,.hero__inner,.hero__scroll,.fleet__inner,.career-hero__inner,.career-hero__caption{z-index:4}
