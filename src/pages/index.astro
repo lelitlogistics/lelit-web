@@ -22,3 +22,32 @@ import Footer from '../components/Footer.astro';
   </main>
   <Footer />
 </Base>
+
+<style is:global>
+  /* Mobile is its own composition: preserve the wide Careers photo instead of
+     forcing the desktop asset into a square crop that cuts off the driver. */
+  @media (max-width: 620px) {
+    .career-hero__photo {
+      aspect-ratio: 16 / 9 !important;
+      max-height: none !important;
+      background: #050a0f;
+    }
+
+    .career-hero__photo > img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      object-position: center center !important;
+    }
+
+    .career-hero__inner {
+      padding-top: 1.4rem !important;
+    }
+  }
+
+  @media (max-width: 430px) {
+    .career-hero__photo {
+      aspect-ratio: 1.72 / 1 !important;
+    }
+  }
+</style>
